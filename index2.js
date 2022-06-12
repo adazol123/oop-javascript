@@ -30,7 +30,8 @@ console.log(person.getInfo())
  * ***********************************************************/
 
 
-// ES6 Constructor
+
+// ES6 Constructor class method
 class Job {
     constructor(Name, Age, Gender){
         this.Name = Name;

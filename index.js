@@ -8,7 +8,7 @@
 
 // console.log(Object.keys(people))
 
-//ES5 Contructor method
+//ES5 Contructor function method
 function People(Name, Age, Gender){
     this.Name = Name;
     this.Age = Age;
