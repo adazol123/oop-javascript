@@ -19,7 +19,14 @@ app.use(express.static('public'))
 
 app.use('/', member)
 
-app.listen(port, function(){
-    console.log('✅ Server is listening to port ' + port)
-    console.log('➡️  http://localhost:' + port)
+app.listen(port, async function(){
+    try {
+        let uri = `mongodb+srv://adazol123:boysupot123@pegaxy.yxitn.mongodb.net/oop-tutorial?retryWrites=true&w=majority`
+        await mongoose.connect(uri, { keepAlive: true })
+        console.log('✅ Server is listening to port ' + port)
+        console.log('➡️  http://localhost:' + port)
+        
+    } catch (error) {
+        console.log('❎ Error occurred: ' + error.message)
+    }
 })
