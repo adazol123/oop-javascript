@@ -2,7 +2,7 @@
   "name": "oop-javascript",
   "version": "1.0.0",
   "description": "test envinronment for object oriented programming for javascript",
-  "main": "index.js",
+  "main": "server.js",
   "author": "Danyel",
   "license": "MIT",
   "dependencies": {
