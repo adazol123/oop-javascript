@@ -17,19 +17,10 @@ const getMember = async (req,res) => {
 //CREATE NEW DOCUMENT TO THE COLLECTION'S DATABASE
 const createMember = async (req,res) => {
     try {
-        const data = new memberSchema({
-            name: req.body.name,
-            username: req.body.username,
-            metamask_address: req.body.metamask_address
-    
-        })
+        const data = new memberSchema(req.body)
         await data.save()
         console.log('✅ success: OK')
-        res.json({
-            name : req.body.name,
-            username : req.body.username,
-            metamask_address: req.body.metamask_address
-        })
+        res.json({sucess: 'OK', created: req.body })
         
     } catch (error) {
         switch(error.code){
@@ -42,20 +33,14 @@ const createMember = async (req,res) => {
     }
 }
 
-//UPDATE SPECIFIC DOCUMENT ON THE COLLECTION'S DATABASE
+//REPLACE SPECIFIC DOCUMENT ON THE COLLECTION'S DATABASE
 const updateMember = async (req,res) => {
     try {
-        await memberSchema.updateOne({username: req.body.username},{
-            $set: {
-                name: req.body.name,
-                metamask_address: req.body.mm_address
-            }
-        })
+        await memberSchema.replaceOne({username: req.body.username}, req.body
+        // overwrite option below will replace the whole document to the collection
+        )
 
-        res.json({
-            updated_name : req.body.name,
-            Updated_metamask_address : req.body.mm_address
-        })
+        res.json({sucess: 'OK', replaced: req.body})
         
     } catch (error) {
         res.json({
@@ -72,7 +57,7 @@ const deleteMember = (req,res) => {
         if(!err){
             res.json({
                 success : 'OK',
-                deleted : 'sucess'
+                deleted : 'All Documents'
             })
         }
         else {
@@ -83,7 +68,48 @@ const deleteMember = (req,res) => {
     })
 }
 
+//UPDATE DOCUMENTS ON THE COLLECTION's DATABASE
+const patchMember = async function(req,res) {
+    try {
+        await memberSchema.updateOne({username: req.body.username},{
+            $set: req.body
+        }
+        )
+
+        res.json({success: 'OK', updated: req.body})
+        
+    } catch (error) {
+        res.json({
+            error: error.message
+        })
+    }
+}
+
+//RETRIEVE SPECIFIC USER FROM THE MEMBER COLLECTION's DATABASE
+const getUser = function(req,res) {
+    memberSchema.findOne({name: req.params.name}, function(err, result){
+        if(err) return res.json({error: err.message})
+        else {
+            if(result !== null) {
+                return res.json({success: 'OK', member: result})
+            }   else {
+                return res.json({ warning: "Unfortunately, the member you are looking at is not yet exist from the database"})
+            }
+        }
+    })
+}
+
+//DELETE SPECIFIC USER UNDER MEMBER DOCUMENT
+const deleteUser = async function(req,res ) {
+    try {
+        await memberSchema.deleteOne({name : req.params.name})
+        res.json({ success: 'OK', deleted: req.params.name})
+    } catch (error) {
+        res.json({ error: error.message})
+    }
+}
+
 
 module.exports = {
-    getMember, createMember, updateMember, deleteMember
+    getMember, createMember, updateMember, patchMember, deleteMember, getUser, deleteUser
 }

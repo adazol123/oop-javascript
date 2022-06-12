@@ -9,6 +9,11 @@ router.route('/')
     .post(memberController.createMember)
     .put(memberController.updateMember)
     .delete(memberController.deleteMember)
+    .patch(memberController.patchMember)
+
+router.route('/:name')
+    .get(memberController.getUser)
+    .delete(memberController.deleteUser)
 
 router.route('/hello')
     .get(memberController.createMember)
